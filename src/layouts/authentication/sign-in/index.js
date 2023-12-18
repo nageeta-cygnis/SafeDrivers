@@ -14,14 +14,35 @@ import BasicLayout from "layouts/authentication/components/BasicLayout";
 import { useNavigate } from "react-router-dom";
 // Images
 import bgImage from "assets/images/bg-sign-in-basic.jpeg";
+import { collection, getDocs, getFirestore } from "firebase/firestore";
+
+// Toast messages
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Basic() {
   const [rememberMe, setRememberMe] = useState(false);
   const navigate = useNavigate();
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const signInSuccessfully = () => {
-    navigate("/dashboard");
+  const signInSuccessfully = async () => {
+    let count = 0;
+    let db = getFirestore();
+    const querySnapshot = await getDocs(collection(db, "users"));
+    querySnapshot.forEach((doc) => {
+      if (doc.data().email === email && doc.data().password === password) {
+        count += 1;
+        navigate("/dashboard");
+      }
+    });
+    if (count === 0) {
+      toast.info("Invalid credentials !", {
+        position: toast.POSITION.BOTTOM_CENTER,
+        autoClose: 3000,
+      });
+    }
   };
 
   return (
@@ -45,10 +66,20 @@ function Basic() {
         <MDBox pt={4} pb={3} px={3}>
           <MDBox component="form" role="form">
             <MDBox mb={2}>
-              <MDInput type="email" label="Email" fullWidth />
+              <MDInput
+                type="email"
+                label="Email"
+                fullWidth
+                onChange={(e) => setEmail(e.target.value)}
+              />
             </MDBox>
             <MDBox mb={2}>
-              <MDInput type="password" label="Password" fullWidth />
+              <MDInput
+                type="password"
+                label="Password"
+                fullWidth
+                onChange={(e) => setPassword(e.target.value)}
+              />
             </MDBox>
             <MDBox display="flex" alignItems="center" ml={-1}>
               <Switch checked={rememberMe} onChange={handleSetRememberMe} />
@@ -75,6 +106,7 @@ function Basic() {
           </MDBox>
         </MDBox>
       </Card>
+      <ToastContainer />
     </BasicLayout>
   );
 }
