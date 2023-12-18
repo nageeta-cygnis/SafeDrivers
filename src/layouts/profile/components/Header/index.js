@@ -1,5 +1,3 @@
-
-
 import { useState, useEffect } from "react";
 
 // prop-types is a library for typechecking of props.

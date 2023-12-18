@@ -1,5 +1,3 @@
-
-
 // Material Dashboard 2 React base styles
 import breakpoints from "assets/theme-dark/base/breakpoints";
 

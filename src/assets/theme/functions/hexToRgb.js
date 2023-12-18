@@ -1,5 +1,3 @@
-
-
 /**
   The hexToRgb() function helps you to change the hex color code to rgb
   using chroma-js library.

@@ -1,5 +1,3 @@
-
-
 // Images
 import kal from "assets/images/kal-visuals-square.jpg";
 import marie from "assets/images/marie.jpg";

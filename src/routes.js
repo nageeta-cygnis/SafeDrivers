@@ -16,8 +16,8 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Tables",
-    key: "tables",
+    name: "Users",
+    key: "users",
     icon: <Icon fontSize="small">table_view</Icon>,
     route: "/tables",
     component: <Tables />,
@@ -32,7 +32,7 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Contact",
+    name: "Contact Us",
     key: "Contact",
     icon: <Icon fontSize="small">person</Icon>,
     route: "/contact",

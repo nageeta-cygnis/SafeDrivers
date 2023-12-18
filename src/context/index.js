@@ -1,5 +1,3 @@
-
-
 /**
   This file is used for controlling the global states of the components,
   you can customize the states for the different components here.

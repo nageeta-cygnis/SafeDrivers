@@ -1,5 +1,3 @@
-
-
 /**
   The linearGradient() function helps you to create a linear gradient color background
  */

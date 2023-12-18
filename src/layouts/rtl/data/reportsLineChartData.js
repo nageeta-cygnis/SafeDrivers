@@ -1,5 +1,3 @@
-
-
 export default {
   sales: {
     labels: ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],

@@ -1,5 +1,3 @@
-
-
 // Material Dashboard 2 React helper functions
 import pxToRem from "assets/theme-dark/functions/pxToRem";
 

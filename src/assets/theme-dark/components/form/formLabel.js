@@ -1,5 +1,3 @@
-
-
 // Material Dashboard 2 React base styles
 import colors from "assets/theme-dark/base/colors";
 

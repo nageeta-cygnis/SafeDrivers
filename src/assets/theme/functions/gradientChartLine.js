@@ -1,5 +1,3 @@
-
-
 /**
   The gradientChartLine() function helps you to create a gradient color for the chart line
  */

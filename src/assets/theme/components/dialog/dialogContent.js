@@ -1,5 +1,3 @@
-
-
 // Material Dashboard 2 React base styles
 import typography from "assets/theme/base/typography";
 import borders from "assets/theme/base/borders";

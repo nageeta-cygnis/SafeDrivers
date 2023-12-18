@@ -1,5 +1,3 @@
-
-
 // Material Dashboard 2 React base styles
 import boxShadows from "assets/theme-dark/base/boxShadows";
 import typography from "assets/theme-dark/base/typography";

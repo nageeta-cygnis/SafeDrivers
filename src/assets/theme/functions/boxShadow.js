@@ -1,5 +1,3 @@
-
-
 /**
   The boxShadow() function helps you to create a box shadow for an element
  */

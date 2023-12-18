@@ -1,7 +1,6 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/function-component-definition */
 
-
 // @mui material components
 import Icon from "@mui/material/Icon";
 
