@@ -16,12 +16,15 @@ import DataTable from "examples/Tables/DataTable";
 // Data
 import data from "layouts/dashboard/components/Projects/data";
 
-function Projects() {
+// eslint-disable-next-line react/prop-types
+function Projects(props) {
   const { columns, rows } = data();
   const [menu, setMenu] = useState(null);
 
   const openMenu = ({ currentTarget }) => setMenu(currentTarget);
   const closeMenu = () => setMenu(null);
+
+  console.log(JSON.stringify(props));
 
   const renderMenu = (
     <Menu
@@ -66,12 +69,12 @@ function Projects() {
             </MDTypography>
           </MDBox>
         </MDBox>
-        <MDBox color="text" px={2}>
+        {/* <MDBox color="text" px={2}>
           <Icon sx={{ cursor: "pointer", fontWeight: "bold" }} fontSize="small" onClick={openMenu}>
             more_vert
           </Icon>
-        </MDBox>
-        {renderMenu}
+        </MDBox> */}
+        {/* {renderMenu} */}
       </MDBox>
       <MDBox>
         <DataTable

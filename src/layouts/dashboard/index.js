@@ -19,9 +19,17 @@ import reportsLineChartData from "layouts/dashboard/data/reportsLineChartData";
 // Dashboard components
 import Projects from "layouts/dashboard/components/Projects";
 import OrdersOverview from "layouts/dashboard/components/OrdersOverview";
+import useFirebaseCalls from "hooks/useFirebaseCalls";
+import { useEffect } from "react";
 
 function Dashboard() {
   const { sales, tasks } = reportsLineChartData;
+  const { fetchUsers, getTotalRides, activeUsers, totalRides, totalIncidents } = useFirebaseCalls();
+
+  useEffect(() => {
+    fetchUsers();
+    getTotalRides();
+  }, []);
 
   return (
     <DashboardLayout>
@@ -34,7 +42,7 @@ function Dashboard() {
                 color="dark"
                 icon="weekend"
                 title="Today's Users"
-                count={281}
+                count={activeUsers.length}
                 percentage={{
                   color: "success",
                   amount: "+55%",
@@ -48,7 +56,7 @@ function Dashboard() {
               <ComplexStatisticsCard
                 icon="leaderboard"
                 title="Rides"
-                count="2,300"
+                count={totalRides.length}
                 percentage={{
                   color: "success",
                   amount: "+3%",
@@ -63,7 +71,7 @@ function Dashboard() {
                 color="success"
                 icon="store"
                 title="Total Incidents"
-                count="34k"
+                count={totalIncidents}
                 percentage={{
                   color: "success",
                   amount: "+1%",
@@ -94,7 +102,7 @@ function Dashboard() {
               <MDBox mb={3}>
                 <ReportsBarChart
                   color="info"
-                  title="Active this month"
+                  title="Active this week"
                   description="Last Month Performance"
                   date="campaign sent 2 days ago"
                   chart={reportsBarChartData}
@@ -132,7 +140,7 @@ function Dashboard() {
         <MDBox>
           <Grid container spacing={3}>
             <Grid item xs={12} md={6} lg={8}>
-              <Projects />
+              <Projects activeUsers={activeUsers} />
             </Grid>
             {/* <Grid item xs={12} md={6} lg={4}>
               <OrdersOverview />
@@ -140,7 +148,7 @@ function Dashboard() {
           </Grid>
         </MDBox>
       </MDBox>
-      <Footer />
+      {/* <Footer /> */}
     </DashboardLayout>
   );
 }

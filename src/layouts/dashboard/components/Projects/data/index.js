@@ -57,16 +57,16 @@ export default function data() {
 
   return {
     columns: [
-      { Header: "companies", accessor: "companies", width: "45%", align: "left" },
-      { Header: "members", accessor: "members", width: "10%", align: "left" },
-      { Header: "budget", accessor: "budget", align: "center" },
-      { Header: "completion", accessor: "completion", align: "center" },
+      { Header: "name", accessor: "Name", width: "45%", align: "left" },
+      { Header: "rides", accessor: "Rides", width: "10%", align: "left" },
+      { Header: "incidents", accessor: "Incidents", align: "center" },
+      { Header: "completion", accessor: "Completion", align: "center" },
     ],
 
     rows: [
       {
-        companies: <Company image={logoXD} name="Material UI XD Version" />,
-        members: (
+        Name: <Company image={logoXD} name="Material UI XD Version" />,
+        Rides: (
           <MDBox display="flex" py={1}>
             {avatars([
               [team1, "Ryan Tompson"],
@@ -76,12 +76,12 @@ export default function data() {
             ])}
           </MDBox>
         ),
-        budget: (
+        Incidents: (
           <MDTypography variant="caption" color="text" fontWeight="medium">
             $14,000
           </MDTypography>
         ),
-        completion: (
+        Completion: (
           <MDBox width="8rem" textAlign="left">
             <MDProgress value={60} color="info" variant="gradient" label={false} />
           </MDBox>

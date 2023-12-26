@@ -32,9 +32,9 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Contact Us",
+    name: "Requests",
     key: "Contact",
-    icon: <Icon fontSize="small">person</Icon>,
+    icon: <Icon fontSize="small">phone</Icon>,
     route: "/contact",
     component: <Contacts />,
   },

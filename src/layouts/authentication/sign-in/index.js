@@ -28,20 +28,32 @@ function Basic() {
   const [password, setPassword] = useState("");
 
   const signInSuccessfully = async () => {
-    let count = 0;
-    let db = getFirestore();
-    const querySnapshot = await getDocs(collection(db, "users"));
-    querySnapshot.forEach((doc) => {
-      if (doc.data().email === email && doc.data().password === password) {
-        count += 1;
-        navigate("/dashboard");
-      }
-    });
-    if (count === 0) {
-      toast.info("Invalid credentials !", {
+    if (email === "") {
+      toast.error("Please provide your email !", {
         position: toast.POSITION.BOTTOM_CENTER,
         autoClose: 3000,
       });
+    } else if (password === "") {
+      toast.error("Please provide your password !", {
+        position: toast.POSITION.BOTTOM_CENTER,
+        autoClose: 3000,
+      });
+    } else {
+      let count = 0;
+      let db = getFirestore();
+      const querySnapshot = await getDocs(collection(db, "users"));
+      querySnapshot.forEach((doc) => {
+        if (doc.data().email === email && doc.data().password === password) {
+          count += 1;
+          navigate("/dashboard");
+        }
+      });
+      if (count === 0) {
+        toast.error("Invalid credentials !", {
+          position: toast.POSITION.BOTTOM_CENTER,
+          autoClose: 3000,
+        });
+      }
     }
   };
 
