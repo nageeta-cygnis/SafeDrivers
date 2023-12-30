@@ -15,7 +15,7 @@ import team4 from "assets/images/team-4.jpg";
 export default function data() {
   const Author = ({ image, name, email }) => (
     <MDBox display="flex" alignItems="center" lineHeight={1}>
-      <MDAvatar src={image} name={name} size="sm" />
+      {image !== undefined && <MDAvatar src={image} name={name} size="sm" />}
       <MDBox ml={2} lineHeight={1}>
         <MDTypography display="block" variant="button" fontWeight="medium">
           {name}
@@ -38,9 +38,7 @@ export default function data() {
     columns: [
       { Header: "author", accessor: "author", width: "45%", align: "left" },
       { Header: "function", accessor: "function", align: "left" },
-      { Header: "status", accessor: "status", align: "center" },
       { Header: "employed", accessor: "employed", align: "center" },
-      { Header: "action", accessor: "action", align: "center" },
     ],
 
     rows: [

@@ -48,7 +48,7 @@ export default function data() {
 
   const Company = ({ image, name }) => (
     <MDBox display="flex" alignItems="center" lineHeight={1}>
-      <MDAvatar src={image} name={name} size="sm" />
+      {image !== undefined && <MDAvatar src={image} name={name} size="sm" />}
       <MDTypography variant="button" fontWeight="medium" ml={1} lineHeight={1}>
         {name}
       </MDTypography>
@@ -65,16 +65,11 @@ export default function data() {
 
     rows: [
       {
-        Name: <Company image={logoXD} name="Material UI XD Version" />,
+        Name: <Company name="Material UI XD Version" />,
         Rides: (
-          <MDBox display="flex" py={1}>
-            {avatars([
-              [team1, "Ryan Tompson"],
-              [team2, "Romina Hadid"],
-              [team3, "Alexander Smith"],
-              [team4, "Jessica Doe"],
-            ])}
-          </MDBox>
+          <MDTypography variant="caption" color="text" fontWeight="medium">
+            $14,000
+          </MDTypography>
         ),
         Incidents: (
           <MDTypography variant="caption" color="text" fontWeight="medium">

@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 
@@ -14,10 +15,74 @@ import DataTable from "examples/Tables/DataTable";
 // Data
 import authorsTableData from "layouts/tables/data/authorsTableData";
 import projectsTableData from "layouts/tables/data/projectsTableData";
+import useFirebaseCalls from "hooks/useFirebaseCalls";
+import { useEffect, useState } from "react";
+import MDAvatar from "components/MDAvatar";
+import MDBadge from "components/MDBadge";
+
+let columns = [
+  { Header: "Name", accessor: "name", width: "45%", align: "left" },
+  { Header: "Contact Number", accessor: "contact", align: "left" },
+  { Header: "status", accessor: "status", align: "center" },
+  { Header: "employed", accessor: "employed", align: "center" },
+];
 
 function Tables() {
-  const { columns, rows } = authorsTableData();
-  const { columns: pColumns, rows: pRows } = projectsTableData();
+  // const { columns, rows } = authorsTableData();
+  const { activeUsers, fetchUsers } = useFirebaseCalls();
+  const [rows, setRows] = useState([]);
+
+  const Author = ({ image, name, email }) => (
+    <MDBox display="flex" alignItems="center" lineHeight={1}>
+      {image !== undefined && <MDAvatar src={image} name={name} size="sm" />}
+      <MDBox ml={2} lineHeight={1}>
+        <MDTypography display="block" variant="button" fontWeight="medium">
+          {name}
+        </MDTypography>
+        <MDTypography variant="caption">{email}</MDTypography>
+      </MDBox>
+    </MDBox>
+  );
+
+  const Job = ({ title, description }) => (
+    <MDBox lineHeight={1} textAlign="left">
+      <MDTypography display="block" variant="caption" color="text" fontWeight="medium">
+        {title}
+      </MDTypography>
+      <MDTypography variant="caption">{description}</MDTypography>
+    </MDBox>
+  );
+
+  const setUserData = () => {
+    setRows([]);
+    activeUsers.map((user) => {
+      let userRows = {
+        name: <Author name={user.full_name} email={user.email} />,
+        contact: <Job title={user.contact_number} description="Mobile number" />,
+        status: (
+          <MDBox ml={-1}>
+            <MDBadge badgeContent="Active" color="success" variant="gradient" size="sm" />
+          </MDBox>
+        ),
+        employed: (
+          <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
+            23/12/23
+          </MDTypography>
+        ),
+      };
+      setRows((prev) => [...prev, userRows]);
+    });
+  };
+
+  useEffect(() => {
+    if (activeUsers.length > 0) {
+      setUserData();
+    }
+  }, [activeUsers]);
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
 
   return (
     <DashboardLayout>
@@ -37,7 +102,7 @@ function Tables() {
                 coloredShadow="info"
               >
                 <MDTypography variant="h6" color="white">
-                  Authors Table
+                  Users
                 </MDTypography>
               </MDBox>
               <MDBox pt={3}>
@@ -53,7 +118,7 @@ function Tables() {
           </Grid>
         </Grid>
       </MDBox>
-      <Footer />
+      {/* <Footer /> */}
     </DashboardLayout>
   );
 }
