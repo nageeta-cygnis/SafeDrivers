@@ -5,6 +5,7 @@ export default () => {
   const [activeUsers, setActiveUsers] = useState([]);
   const [totalRides, setTotalRides] = useState([]);
   const [totalIncidents, setTotalIncidents] = useState(0);
+  const [messages, setMessages] = useState([]);
 
   const fetchUsers = async () => {
     setActiveUsers([]);
@@ -27,11 +28,22 @@ export default () => {
     setTotalIncidents(total);
   };
 
+  const fetchMessages = async () => {
+    setMessages([]);
+    let db = getFirestore();
+    const querySnapshot = await getDocs(collection(db, "messages"));
+    querySnapshot.forEach((doc) => {
+      setMessages((prev) => [...(prev ?? []), doc.data()]);
+    });
+  };
+
   return {
     fetchUsers,
     activeUsers,
     getTotalRides,
     totalRides,
     totalIncidents,
+    fetchMessages,
+    messages,
   };
 };

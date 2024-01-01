@@ -36,9 +36,9 @@ export default function data() {
 
   return {
     columns: [
-      { Header: "author", accessor: "author", width: "45%", align: "left" },
-      { Header: "function", accessor: "function", align: "left" },
-      { Header: "employed", accessor: "employed", align: "center" },
+      { Header: "author", accessor: "author", width: "25%", align: "left" },
+      { Header: "function", accessor: "function", width: "15%", align: "left" },
+      { Header: "employed", accessor: "employed", align: "left" },
     ],
 
     rows: [
