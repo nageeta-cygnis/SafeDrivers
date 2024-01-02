@@ -13,7 +13,6 @@ import ReportsLineChart from "examples/Charts/LineCharts/ReportsLineChart";
 import ComplexStatisticsCard from "examples/Cards/StatisticsCards/ComplexStatisticsCard";
 
 // Data
-import reportsBarChartData from "layouts/dashboard/data/reportsBarChartData";
 import reportsLineChartData from "layouts/dashboard/data/reportsLineChartData";
 
 // Dashboard components
@@ -21,6 +20,12 @@ import Projects from "layouts/dashboard/components/Projects";
 import OrdersOverview from "layouts/dashboard/components/OrdersOverview";
 import useFirebaseCalls from "hooks/useFirebaseCalls";
 import { useEffect } from "react";
+import moment from "moment";
+
+let weekReportsBarChartData = {
+  labels: ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"],
+  datasets: { label: "Active", data: [0, 0, 0, 0, 0, 0, 0] },
+};
 
 function Dashboard() {
   const { sales, tasks } = reportsLineChartData;
@@ -29,7 +34,43 @@ function Dashboard() {
   useEffect(() => {
     fetchUsers();
     getTotalRides();
+    fetchRidesPerWeek();
   }, []);
+
+  const fetchRidesPerWeek = () => {
+    let weeklyRides = [];
+    totalRides.map((ride) => {
+      let rideStarted = moment(ride.created_at);
+      let last = moment().subtract(7, "days");
+      let now = moment();
+      if (rideStarted.isBetween(last, now)) {
+        weeklyRides.push(ride);
+      }
+    });
+    let weekArr = {};
+    weeklyRides.map((ride) => {
+      if (weekArr[moment(ride.created_at).format("dd")] === undefined) {
+        weekArr[moment(ride.created_at).format("dd")] = 1;
+      } else {
+        weekArr[moment(ride.created_at).format("dd")] += 1;
+      }
+    });
+    weeklyRides.map((ride) => {
+      let itemToFind = Object.entries(weekArr).find(
+        (validRide) => validRide[0] === moment(ride.created_at).format("dd")
+      );
+      let indexToFind = weekReportsBarChartData.labels.findIndex(
+        (day) => day === moment(ride.created_at).format("dd")
+      );
+      weekReportsBarChartData.datasets.data[indexToFind] = itemToFind?.[1];
+    });
+  };
+
+  useEffect(() => {
+    if (totalRides.length > 0) {
+      fetchRidesPerWeek();
+    }
+  }, [totalRides]);
 
   return (
     <DashboardLayout>
@@ -105,7 +146,7 @@ function Dashboard() {
                   title="Active this week"
                   description="Last Month Performance"
                   date="campaign sent 2 days ago"
-                  chart={reportsBarChartData}
+                  chart={weekReportsBarChartData}
                 />
               </MDBox>
             </Grid>
