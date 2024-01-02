@@ -27,8 +27,18 @@ let weekReportsBarChartData = {
   datasets: { label: "Active", data: [0, 0, 0, 0, 0, 0, 0] },
 };
 
+let monthRideReportChartData = {
+  labels: ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+  datasets: { label: "Mobile apps", data: [0, 0, 0, 0, 0, 0, 0, 0, 0] },
+};
+
+let monthIncidentReportChartData = {
+  labels: ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+  datasets: { label: "Mobile apps", data: [0, 0, 0, 0, 0, 0, 0, 0, 0] },
+};
+
 function Dashboard() {
-  const { sales, tasks } = reportsLineChartData;
+  const { tasks } = reportsLineChartData;
   const { fetchUsers, getTotalRides, activeUsers, totalRides, totalIncidents } = useFirebaseCalls();
 
   useEffect(() => {
@@ -73,9 +83,91 @@ function Dashboard() {
     });
   };
 
+  const fetchRidesFromLastYear = () => {
+    let months = [];
+    for (let i = 8; i >= 0; i--) {
+      months.push(moment().subtract(i, "months").format("MMM"));
+    }
+    monthRideReportChartData = {
+      labels: months,
+      datasets: { label: "Active", data: [0, 0, 0, 0, 0, 0, 0, 0, 0] },
+    };
+    let monthlyRides = [];
+    totalRides.map((ride) => {
+      let rideStarted = moment(ride.created_at);
+      let last = moment().subtract(8, "months");
+      let now = moment();
+      if (rideStarted.isBetween(last, now)) {
+        monthlyRides.push(ride);
+      }
+    });
+    let monthArr = {};
+    monthlyRides.map((ride) => {
+      if (monthArr[moment(ride.created_at).format("MMM")] === undefined) {
+        monthArr[moment(ride.created_at).format("MMM")] = 1;
+      } else {
+        monthArr[moment(ride.created_at).format("MMM")] += 1;
+      }
+    });
+    monthlyRides.map((ride) => {
+      let itemToFind = Object.entries(monthArr).find(
+        (validRide) => validRide[0] === moment(ride.created_at).format("MMM")
+      );
+      let indexToFind = monthRideReportChartData.labels.findIndex(
+        (day) => day === moment(ride.created_at).format("MMM")
+      );
+      monthRideReportChartData.datasets.data[indexToFind] = itemToFind?.[1];
+    });
+  };
+
+  const fetchIncidentsFromLastYear = () => {
+    let months = [];
+    for (let i = 8; i >= 0; i--) {
+      months.push(moment().subtract(i, "months").format("MMM"));
+    }
+    monthIncidentReportChartData = {
+      labels: months,
+      datasets: { label: "Active", data: [0, 0, 0, 0, 0, 0, 0, 0, 0] },
+    };
+    let incidentContainer = [];
+    totalRides.map((ride) => {
+      ride.incidents.map((incident) => {
+        incidentContainer.push(incident);
+      });
+    });
+    let monthlyIncidents = [];
+    incidentContainer.map((incident) => {
+      let incidentStarted = moment(incident.created_At);
+      let last = moment().subtract(8, "months");
+      let now = moment();
+      if (incidentStarted.isBetween(last, now)) {
+        monthlyIncidents.push(incident);
+      }
+    });
+    let monthArr = {};
+    monthlyIncidents.map((incident) => {
+      if (monthArr[moment(incident.created_At).format("MMM")] === undefined) {
+        monthArr[moment(incident.created_At).format("MMM")] = 1;
+      } else {
+        monthArr[moment(incident.created_At).format("MMM")] += 1;
+      }
+    });
+    monthlyIncidents.map((incident) => {
+      let itemToFind = Object.entries(monthArr).find(
+        (validIncident) => validIncident[0] === moment(incident.created_At).format("MMM")
+      );
+      let indexToFind = monthIncidentReportChartData.labels.findIndex(
+        (day) => day === moment(incident.created_At).format("MMM")
+      );
+      monthIncidentReportChartData.datasets.data[indexToFind] = itemToFind?.[1];
+    });
+  };
+
   useEffect(() => {
     if (totalRides.length > 0) {
       fetchRidesPerWeek();
+      fetchRidesFromLastYear();
+      fetchIncidentsFromLastYear();
     }
   }, [totalRides]);
 
@@ -152,7 +244,7 @@ function Dashboard() {
                   color="info"
                   title="Active this week"
                   description="Last Month Performance"
-                  date="campaign sent 2 days ago"
+                  date="updated 4 min ago"
                   chart={weekReportsBarChartData}
                 />
               </MDBox>
@@ -168,7 +260,7 @@ function Dashboard() {
                     </>
                   }
                   date="updated 4 min ago"
-                  chart={sales}
+                  chart={monthRideReportChartData}
                 />
               </MDBox>
             </Grid>
@@ -179,7 +271,7 @@ function Dashboard() {
                   title="Incidents this year"
                   description="Last Month Performance"
                   date="just updated"
-                  chart={tasks}
+                  chart={monthIncidentReportChartData}
                 />
               </MDBox>
             </Grid>
