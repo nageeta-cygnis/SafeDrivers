@@ -34,14 +34,21 @@ function Dashboard() {
   useEffect(() => {
     fetchUsers();
     getTotalRides();
-    fetchRidesPerWeek();
   }, []);
 
   const fetchRidesPerWeek = () => {
+    let days = [];
+    for (let i = 6; i >= 0; i--) {
+      days.push(moment().subtract(i, "days").format("dd"));
+    }
+    weekReportsBarChartData = {
+      labels: days,
+      datasets: { label: "Active", data: [0, 0, 0, 0, 0, 0, 0] },
+    };
     let weeklyRides = [];
     totalRides.map((ride) => {
       let rideStarted = moment(ride.created_at);
-      let last = moment().subtract(7, "days");
+      let last = moment().subtract(6, "days");
       let now = moment();
       if (rideStarted.isBetween(last, now)) {
         weeklyRides.push(ride);
@@ -154,7 +161,7 @@ function Dashboard() {
               <MDBox mb={3}>
                 <ReportsLineChart
                   color="success"
-                  title="Rides this month"
+                  title="Rides this year"
                   description={
                     <>
                       (<strong>+15%</strong>) increase in today rides.
@@ -169,7 +176,7 @@ function Dashboard() {
               <MDBox mb={3}>
                 <ReportsLineChart
                   color="dark"
-                  title="Incidents this month"
+                  title="Incidents this year"
                   description="Last Month Performance"
                   date="just updated"
                   chart={tasks}
