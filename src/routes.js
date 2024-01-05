@@ -3,6 +3,7 @@ import Tables from "layouts/tables";
 import Profile from "layouts/profile";
 import Contacts from "layouts/contacts";
 import Rides from "layouts/rides";
+import Reporting from "layouts/reporting";
 // @mui icons
 import Icon from "@mui/material/Icon";
 
@@ -46,6 +47,14 @@ const routes = [
     icon: <Icon fontSize="small">car_crash</Icon>,
     route: "/rides",
     component: <Rides />,
+  },
+  {
+    type: "collapse",
+    name: "User Reporting",
+    key: "User Reporting",
+    icon: <Icon fontSize="small">car_crash</Icon>,
+    route: "/reporting",
+    component: <Reporting />,
   },
 ];
 
