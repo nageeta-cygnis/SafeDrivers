@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import MDBadge from "components/MDBadge";
 import { collection, query, onSnapshot, getFirestore, doc } from "firebase/firestore";
 import useFirebaseCalls from "hooks/useFirebaseCalls";
+import CircularProgress from "@mui/material/CircularProgress";
 
 let columns = [
   { Header: "name", accessor: "name", width: "25%", align: "left" },
@@ -127,15 +128,21 @@ function Contacts() {
                   Rides
                 </MDTypography>
               </MDBox>
-              <MDBox pt={3}>
-                <DataTable
-                  table={{ columns, rows }}
-                  isSorted={false}
-                  entriesPerPage={false}
-                  showTotalEntries={false}
-                  noEndBorder
-                />
-              </MDBox>
+              {rows.length > 0 ? ( // Conditionally render loader
+                <MDBox pt={3}>
+                  <DataTable
+                    table={{ columns, rows }}
+                    isSorted={false}
+                    entriesPerPage={false}
+                    showTotalEntries={false}
+                    noEndBorder
+                  />
+                </MDBox>
+              ) : (
+                <MDBox display="flex" justifyContent="center" py={3}>
+                  <CircularProgress />
+                </MDBox>
+              )}
             </Card>
           </Grid>
         </Grid>

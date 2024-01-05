@@ -17,6 +17,7 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import CircularProgress from "@mui/material/CircularProgress";
 
 let columns = [
   { Header: "name", accessor: "name", width: "25%", align: "left" },
@@ -166,15 +167,21 @@ function Reporting() {
                   })}
                 </Select>
               </FormControl>
-              <MDBox pt={3}>
-                <DataTable
-                  table={{ columns, rows }}
-                  isSorted={false}
-                  entriesPerPage={false}
-                  showTotalEntries={false}
-                  noEndBorder
-                />
-              </MDBox>
+              {rows.length > 0 ? ( // Conditionally render loader
+                <MDBox pt={3}>
+                  <DataTable
+                    table={{ columns, rows }}
+                    isSorted={false}
+                    entriesPerPage={false}
+                    showTotalEntries={false}
+                    noEndBorder
+                  />
+                </MDBox>
+              ) : (
+                <MDBox display="flex" justifyContent="center" py={3}>
+                  <CircularProgress />
+                </MDBox>
+              )}
             </Card>
           </Grid>
         </Grid>

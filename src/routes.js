@@ -1,5 +1,5 @@
 import Dashboard from "layouts/dashboard";
-import Tables from "layouts/tables";
+import Users from "layouts/users";
 import Profile from "layouts/profile";
 import Contacts from "layouts/contacts";
 import Rides from "layouts/rides";
@@ -21,8 +21,8 @@ const routes = [
     name: "Users",
     key: "users",
     icon: <Icon fontSize="small">table_view</Icon>,
-    route: "/tables",
-    component: <Tables />,
+    route: "/users",
+    component: <Users />,
   },
   {
     type: "collapse",
@@ -52,7 +52,7 @@ const routes = [
     type: "collapse",
     name: "User Reporting",
     key: "User Reporting",
-    icon: <Icon fontSize="small">car_crash</Icon>,
+    icon: <Icon fontSize="small">summarize</Icon>,
     route: "/reporting",
     component: <Reporting />,
   },

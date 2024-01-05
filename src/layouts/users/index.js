@@ -11,10 +11,9 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 import DataTable from "examples/Tables/DataTable";
+import CircularProgress from "@mui/material/CircularProgress";
 
 // Data
-import authorsTableData from "layouts/tables/data/authorsTableData";
-import projectsTableData from "layouts/tables/data/projectsTableData";
 import useFirebaseCalls from "hooks/useFirebaseCalls";
 import { useEffect, useState } from "react";
 import MDAvatar from "components/MDAvatar";
@@ -27,7 +26,7 @@ let columns = [
   { Header: "employed", accessor: "employed", align: "center" },
 ];
 
-function Tables() {
+function Users() {
   // const { columns, rows } = authorsTableData();
   const { activeUsers, fetchUsers } = useFirebaseCalls();
   const [rows, setRows] = useState([]);
@@ -105,15 +104,21 @@ function Tables() {
                   Users
                 </MDTypography>
               </MDBox>
-              <MDBox pt={3}>
-                <DataTable
-                  table={{ columns, rows }}
-                  isSorted={false}
-                  entriesPerPage={false}
-                  showTotalEntries={false}
-                  noEndBorder
-                />
-              </MDBox>
+              {rows.length > 0 ? ( // Conditionally render loader
+                <MDBox pt={3}>
+                  <DataTable
+                    table={{ columns, rows }}
+                    isSorted={false}
+                    entriesPerPage={false}
+                    showTotalEntries={false}
+                    noEndBorder
+                  />
+                </MDBox>
+              ) : (
+                <MDBox display="flex" justifyContent="center" py={3}>
+                  <CircularProgress />
+                </MDBox>
+              )}
             </Card>
           </Grid>
         </Grid>
@@ -123,4 +128,4 @@ function Tables() {
   );
 }
 
-export default Tables;
+export default Users;

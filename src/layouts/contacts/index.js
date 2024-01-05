@@ -9,12 +9,10 @@ import MDTypography from "components/MDTypography";
 // Material Dashboard 2 React example components
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
-import Footer from "examples/Footer";
 import DataTable from "examples/Tables/DataTable";
-import authorsTableData from "layouts/tables/data/authorsTableData";
 import { useEffect, useState } from "react";
 import useFirebaseCalls from "hooks/useFirebaseCalls";
-import MDBadge from "components/MDBadge";
+import CircularProgress from "@mui/material/CircularProgress";
 
 let columns = [
   { Header: "user", accessor: "user", width: "35%", align: "left" },
@@ -87,15 +85,21 @@ function Contacts() {
                   Contact Requests
                 </MDTypography>
               </MDBox>
-              <MDBox pt={3}>
-                <DataTable
-                  table={{ columns, rows }}
-                  isSorted={false}
-                  entriesPerPage={false}
-                  showTotalEntries={false}
-                  noEndBorder
-                />
-              </MDBox>
+              {rows.length > 0 ? ( // Conditionally render loader
+                <MDBox pt={3}>
+                  <DataTable
+                    table={{ columns, rows }}
+                    isSorted={false}
+                    entriesPerPage={false}
+                    showTotalEntries={false}
+                    noEndBorder
+                  />
+                </MDBox>
+              ) : (
+                <MDBox display="flex" justifyContent="center" py={3}>
+                  <CircularProgress />
+                </MDBox>
+              )}
             </Card>
           </Grid>
         </Grid>
