@@ -35,13 +35,32 @@ let monthIncidentReportChartData = {
   datasets: { label: "Mobile apps", data: [0, 0, 0, 0, 0, 0, 0, 0, 0] },
 };
 
+let userRideBarChartData = {
+  labels: ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"],
+  datasets: { label: "Active", data: [0, 0, 0, 0, 0, 0, 0] },
+};
+
+let userIncidentBarChartData = {
+  labels: ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"],
+  datasets: { label: "Active", data: [0, 0, 0, 0, 0, 0, 0] },
+};
+
 function Dashboard() {
   const { tasks } = reportsLineChartData;
-  const { fetchUsers, getTotalRides, activeUsers, totalRides, totalIncidents } = useFirebaseCalls();
+  const {
+    fetchUsers,
+    getTotalRides,
+    activeUsers,
+    totalRides,
+    totalIncidents,
+    fetchMessages,
+    messages,
+  } = useFirebaseCalls();
 
   useEffect(() => {
     fetchUsers();
     getTotalRides();
+    fetchMessages();
   }, []);
 
   const fetchRidesPerWeek = () => {
@@ -161,13 +180,41 @@ function Dashboard() {
     });
   };
 
+  const fetchUserRideReport = () => {
+    let userNames = [];
+    let userRides = [];
+    let userIncidents = [];
+    let totalUserIncidents = 0;
+    for (let i = 0; i < activeUsers.length; i++) {
+      totalUserIncidents = 0;
+      userNames.push(activeUsers[i].full_name);
+      let totalUserRides = totalRides.filter((ride) => ride.user_id === activeUsers[i].id);
+      userRides.push(totalUserRides.length);
+      totalUserRides.map((validRides) => {
+        totalUserIncidents += validRides.incidents.length;
+      });
+      userIncidents.push(totalUserIncidents);
+    }
+    userRideBarChartData = {
+      labels: userNames,
+      datasets: { label: "Active", data: userRides },
+    };
+    userIncidentBarChartData = {
+      labels: userNames,
+      datasets: { label: "Active", data: userIncidents },
+    };
+  };
+
   useEffect(() => {
     if (totalRides.length > 0) {
       fetchRidesPerWeek();
       fetchRidesFromLastYear();
       fetchIncidentsFromLastYear();
+      if (activeUsers.length > 0) {
+        fetchUserRideReport();
+      }
     }
-  }, [totalRides]);
+  }, [totalRides, activeUsers]);
 
   return (
     <DashboardLayout>
@@ -223,8 +270,8 @@ function Dashboard() {
               <ComplexStatisticsCard
                 color="primary"
                 icon="person_add"
-                title="Followers"
-                count="+91"
+                title="Requests"
+                count={messages.length}
                 percentage={{
                   color: "success",
                   amount: "",
@@ -277,10 +324,10 @@ function Dashboard() {
               <MDBox mb={3}>
                 <ReportsBarChart
                   color="secondary"
-                  title="Active this week"
+                  title="Rides with respect to users"
                   description="Last Month Performance"
                   date="updated 4 min ago"
-                  chart={weekReportsBarChartData}
+                  chart={userRideBarChartData}
                 />
               </MDBox>
             </Grid>
@@ -288,10 +335,10 @@ function Dashboard() {
               <MDBox mb={3}>
                 <ReportsBarChart
                   color="warning"
-                  title="Active this week"
+                  title="Incidents with respect to users"
                   description="Last Month Performance"
                   date="updated 4 min ago"
-                  chart={weekReportsBarChartData}
+                  chart={userIncidentBarChartData}
                 />
               </MDBox>
             </Grid>
