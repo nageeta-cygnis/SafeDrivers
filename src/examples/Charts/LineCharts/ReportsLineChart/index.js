@@ -82,7 +82,7 @@ function ReportsLineChart({ color, title, description, date, chart }) {
           <MDTypography variant="h6" textTransform="capitalize">
             {title}
           </MDTypography>
-          <MDTypography component="div" variant="button" color="text" fontWeight="light">
+          {/* <MDTypography component="div" variant="button" color="text" fontWeight="light">
             {description}
           </MDTypography>
           <Divider />
@@ -93,7 +93,7 @@ function ReportsLineChart({ color, title, description, date, chart }) {
             <MDTypography variant="button" color="text" fontWeight="light">
               {date}
             </MDTypography>
-          </MDBox>
+          </MDBox> */}
         </MDBox>
       </MDBox>
     </Card>

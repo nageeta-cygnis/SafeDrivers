@@ -7,7 +7,6 @@ import MDBox from "components/MDBox";
 // Material Dashboard 2 React example components
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
-import Footer from "examples/Footer";
 import ReportsBarChart from "examples/Charts/BarCharts/ReportsBarChart";
 import ReportsLineChart from "examples/Charts/LineCharts/ReportsLineChart";
 import ComplexStatisticsCard from "examples/Cards/StatisticsCards/ComplexStatisticsCard";
@@ -17,7 +16,6 @@ import reportsLineChartData from "layouts/dashboard/data/reportsLineChartData";
 
 // Dashboard components
 import Projects from "layouts/dashboard/components/Projects";
-import OrdersOverview from "layouts/dashboard/components/OrdersOverview";
 import useFirebaseCalls from "hooks/useFirebaseCalls";
 import { useEffect } from "react";
 import moment from "moment";
@@ -272,6 +270,39 @@ function Dashboard() {
                   description="Last Month Performance"
                   date="just updated"
                   chart={monthIncidentReportChartData}
+                />
+              </MDBox>
+            </Grid>
+            <Grid item xs={12} md={6} lg={4}>
+              <MDBox mb={3}>
+                <ReportsBarChart
+                  color="secondary"
+                  title="Active this week"
+                  description="Last Month Performance"
+                  date="updated 4 min ago"
+                  chart={weekReportsBarChartData}
+                />
+              </MDBox>
+            </Grid>
+            <Grid item xs={12} md={6} lg={4}>
+              <MDBox mb={3}>
+                <ReportsBarChart
+                  color="warning"
+                  title="Active this week"
+                  description="Last Month Performance"
+                  date="updated 4 min ago"
+                  chart={weekReportsBarChartData}
+                />
+              </MDBox>
+            </Grid>
+            <Grid item xs={12} md={6} lg={4}>
+              <MDBox mb={3}>
+                <ReportsBarChart
+                  color="error"
+                  title="Active this week"
+                  description="Last Month Performance"
+                  date="updated 4 min ago"
+                  chart={weekReportsBarChartData}
                 />
               </MDBox>
             </Grid>
