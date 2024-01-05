@@ -11,7 +11,7 @@ import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import DataTable from "examples/Tables/DataTable";
 import { useEffect, useState } from "react";
 import MDBadge from "components/MDBadge";
-import { collection, query, onSnapshot, getFirestore } from "firebase/firestore";
+import { collection, query, getFirestore, where, getDocs } from "firebase/firestore";
 import useFirebaseCalls from "hooks/useFirebaseCalls";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -64,54 +64,63 @@ function Reporting() {
     </MDBox>
   );
 
-  const getAllRides = () => {
+  const getUserByName = () => {
+    let userToFind = activeUsers.find((_user) => _user.full_name === user);
+    if (userToFind) {
+      return userToFind.id;
+    }
+  };
+
+  const getAllRides = async () => {
     setRows([]);
     let db = getFirestore();
-    const rideQuery = query(collection(db, "rides"));
-    const rideSnapshot = onSnapshot(rideQuery, (querySnapshot) => {
-      setRows([]);
-      querySnapshot.forEach((doc) => {
-        let newRide = {
-          name: (
-            <Job
-              title={getUserName(doc.data().user_id).full_name}
-              description={getUserName(doc.data().user_id).email}
+    const q = query(collection(db, "rides"), where("user_id", "==", `${getUserByName()}`));
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      let newRide = {
+        name: (
+          <Job
+            title={getUserName(doc.data().user_id).full_name}
+            description={getUserName(doc.data().user_id).email}
+          />
+        ),
+        reported_incidents: (
+          <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
+            {doc.data().incidents.length}
+          </MDTypography>
+        ),
+        speed: (
+          <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
+            {getTopSpeed(doc.data().incidents)} Km/h
+          </MDTypography>
+        ),
+        ride_started: (
+          <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
+            {doc.data().created_at}
+          </MDTypography>
+        ),
+        status: (
+          <MDBox ml={-1}>
+            <MDBadge
+              badgeContent={doc.data().isActive ? "Live" : "Ride ended"}
+              color={doc.data().incidents.length > 0 ? "error" : "success"}
+              variant="gradient"
+              size="sm"
             />
-          ),
-          reported_incidents: (
-            <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-              {doc.data().incidents.length}
-            </MDTypography>
-          ),
-          speed: (
-            <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-              {getTopSpeed(doc.data().incidents)} Km/h
-            </MDTypography>
-          ),
-          ride_started: (
-            <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-              {doc.data().created_at}
-            </MDTypography>
-          ),
-          status: (
-            <MDBox ml={-1}>
-              <MDBadge
-                badgeContent={doc.data().isActive ? "Live" : "Ride ended"}
-                color={doc.data().incidents.length > 0 ? "error" : "success"}
-                variant="gradient"
-                size="sm"
-              />
-            </MDBox>
-          ),
-        };
-        setRows((prev) => [...prev, newRide]);
-      });
+          </MDBox>
+        ),
+      };
+      setRows((prev) => [...prev, newRide]);
     });
   };
 
   useEffect(() => {
+    getAllRides();
+  }, [user]);
+
+  useEffect(() => {
     if (activeUsers.length > 0) {
-      getAllRides();
+      setUser(activeUsers[0].full_name);
     }
   }, [activeUsers]);
 
@@ -148,12 +157,13 @@ function Reporting() {
                   onChange={handleChange}
                   label="User"
                 >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  <MenuItem value={10}>Ten</MenuItem>
-                  <MenuItem value={20}>Twenty</MenuItem>
-                  <MenuItem value={30}>Thirty</MenuItem>
+                  {activeUsers.map((user) => {
+                    return (
+                      <MenuItem value={user.full_name} key={user.full_name}>
+                        {user.full_name}
+                      </MenuItem>
+                    );
+                  })}
                 </Select>
               </FormControl>
               <MDBox pt={3}>
